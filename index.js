@@ -23,19 +23,18 @@ const http = require('http')
 
 const serverAPP = http.createServer(server)
 
-
 const PORT = process.env.PORT || 3000
 
-// Syncing all the models at once.
-// conn.sync(/*{ force: true }*/).then(() => {
-//   server.listen(3002, () => {
-//     console.log('%s listening at 3002'); // eslint-disable-line no-console
-//   });
-// });
-
-
+try {
 conn.sync(/*{ force: true }*/).then(() => {
   serverAPP.listen(PORT, () => {
     console.log(`Server listening on ${PORT} `); // eslint-disable-line no-console
   });
 });
+} catch(error) {
+console.log(error);
+return error;
+}
+
+
+
