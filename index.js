@@ -29,7 +29,7 @@ const PORT = process.env.PORT || 3000
 // const start = async () => {
 //   try {
 // await 
-conn.then(() => {
+conn.sync(/*{ force: true }*/).then(() => {
   serverAPP.listen(PORT, () => {
     console.log(`Server listening on ${PORT} `); // eslint-disable-line no-console
   });
