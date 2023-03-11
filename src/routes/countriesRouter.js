@@ -1,13 +1,14 @@
 const { Router } = require('express');
 const { Op } = require('sequelize');
 const router = Router();
+
 //importofunciones y  los modelos de los paises para utilizarlos.;
 const { getCountriesApi, upper } = require('./controllers/controllers');
 const { Country, Activity } = require('../db');
-var routeCache = require('route-cache');
+
 
 //first get and get by name for query
-router.get('/', routeCache.cacheSeconds(20), async (req, res) => {
+router.get('/', async (req, res) => {
     const data = await Country.findAll({ order: [['name', 'ASC']], include: Activity });
     const { name } = req.query;
 
@@ -45,7 +46,7 @@ router.get('/', routeCache.cacheSeconds(20), async (req, res) => {
 })
 
 
-router.get('/:id', routeCache.cacheSeconds(20), async (req, res) => {
+router.get('/:id', async (req, res) => {
     let { id } = req.params;
     try {
         //El include funciona para agregarle el modelo actividad al pais.
@@ -57,7 +58,7 @@ router.get('/:id', routeCache.cacheSeconds(20), async (req, res) => {
     }
 })
 
-router.get('/', routeCache.cacheSeconds(20), async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const country = await Country.findAll({
             where: {

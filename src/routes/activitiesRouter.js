@@ -1,14 +1,15 @@
 const { Router } = require('express');
+
 const router = Router();
 //importo funciones de controllers y modelo de actividades .
 const { addActivityy } = require('./controllers/controllers');
 const { Activity, Country, } = require('../db');
-var routeCache = require('route-cache');
 
 
 
 
-router.post("/", routeCache.cacheSeconds(20), async (req, res) => {
+
+router.post("/", async (req, res) => {
     const { name, difficulty, duration, season, idCountries, review } = req.body;
     if (!name || !difficulty || !season || !duration || !idCountries) return res.status(400).send("Faltan datos");
 
@@ -22,7 +23,7 @@ router.post("/", routeCache.cacheSeconds(20), async (req, res) => {
 
 })
 
-router.get("/", routeCache.cacheSeconds(20), async (req, res) => {
+router.get("/", async (req, res) => {
     const actividades = await Activity.findAll({ include: Country });
     const filterActivities = actividades.filter((activity) => {
         const largo = activity.countries.length
@@ -38,7 +39,7 @@ router.get("/", routeCache.cacheSeconds(20), async (req, res) => {
 })
 
 
-router.delete("/:idCountry/:id", routeCache.cacheSeconds(20), async (req, res) => {
+router.delete("/:idCountry/:id", async (req, res) => {
     const { idCountry, id, name } = req.params;
     const country = await Country.findByPk(idCountry,
         {
