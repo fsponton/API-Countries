@@ -26,19 +26,19 @@ const serverAPP = http.createServer(server)
 
 const PORT = process.env.PORT || 3000
 
-// const start = async () => {
-//   try {
-// await 
-conn.sync(/*{ force: true }*/).then(() => {
-  serverAPP.listen(PORT, () => {
-    console.log(`Server listening on ${PORT} `); // eslint-disable-line no-console
-  });
-});
-//   } catch (error) {
-//     console.log(error);
-//     return error;
-//   }
-// }
-// start();
+const start = async () => {
+  try {
+    await
+      conn.sync(/*{ force: true }*/).then(() => {
+        serverAPP.listen(PORT, () => {
+          console.log(`Server listening on ${PORT} `); // eslint-disable-line no-console
+        });
+      });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+start();
 
 
