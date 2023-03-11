@@ -3,11 +3,12 @@ const router = Router();
 //importo funciones de controllers y modelo de actividades .
 const { addActivityy } = require('./controllers/controllers');
 const { Activity, Country, } = require('../db');
-const CacheableLookup = require('cacheable-lookup');
+var routeCache = require('route-cache');
 
-const cacheable = new CacheableLookup();
 
-router.post("/", cacheable, async (req, res) => {
+
+
+router.post("/", routeCache.cacheSeconds(20), async (req, res) => {
     const { name, difficulty, duration, season, idCountries, review } = req.body;
     if (!name || !difficulty || !season || !duration || !idCountries) return res.status(400).send("Faltan datos");
 
@@ -21,7 +22,7 @@ router.post("/", cacheable, async (req, res) => {
 
 })
 
-router.get("/", cacheable, async (req, res) => {
+router.get("/", routeCache.cacheSeconds(20), async (req, res) => {
     const actividades = await Activity.findAll({ include: Country });
     const filterActivities = actividades.filter((activity) => {
         const largo = activity.countries.length
@@ -37,7 +38,7 @@ router.get("/", cacheable, async (req, res) => {
 })
 
 
-router.delete("/:idCountry/:id", cacheable, async (req, res) => {
+router.delete("/:idCountry/:id", routeCache.cacheSeconds(20), async (req, res) => {
     const { idCountry, id, name } = req.params;
     const country = await Country.findByPk(idCountry,
         {

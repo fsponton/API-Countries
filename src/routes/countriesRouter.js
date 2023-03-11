@@ -4,12 +4,10 @@ const router = Router();
 //importofunciones y  los modelos de los paises para utilizarlos.;
 const { getCountriesApi, upper } = require('./controllers/controllers');
 const { Country, Activity } = require('../db');
-const CacheableLookup = require('cacheable-lookup');
-
-const cacheable = new CacheableLookup();
+var routeCache = require('route-cache');
 
 //first get and get by name for query
-router.get('/', cacheable, async (req, res) => {
+router.get('/', routeCache.cacheSeconds(20), async (req, res) => {
     const data = await Country.findAll({ order: [['name', 'ASC']], include: Activity });
     const { name } = req.query;
 
@@ -47,7 +45,7 @@ router.get('/', cacheable, async (req, res) => {
 })
 
 
-router.get('/:id', cacheable, async (req, res) => {
+router.get('/:id', routeCache.cacheSeconds(20), async (req, res) => {
     let { id } = req.params;
     try {
         //El include funciona para agregarle el modelo actividad al pais.
@@ -59,7 +57,7 @@ router.get('/:id', cacheable, async (req, res) => {
     }
 })
 
-router.get('/', cacheable, async (req, res) => {
+router.get('/', routeCache.cacheSeconds(20), async (req, res) => {
     try {
         const country = await Country.findAll({
             where: {
